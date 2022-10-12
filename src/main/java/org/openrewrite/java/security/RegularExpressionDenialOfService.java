@@ -48,7 +48,7 @@ public class RegularExpressionDenialOfService extends Recipe  {
                 "(\\r|\\n)*"
         ),
         SELECT_ALL_INCLUDING_ESCAPED_CHARACTERS(
-                "(\\\\?.)*",
+                "(\\?.)*",
                 ".*"
         ),
         PARTIAL_EMAIL_VALIDATOR(
@@ -56,8 +56,8 @@ public class RegularExpressionDenialOfService extends Recipe  {
                 "([^@\\s.]+\\.)+"
         ),
         DECIMAL_NUMBER_VALIDATOR(
-                "(\\\\d+\\\\.?)*",
-                "((\\\\d+\\\\.)*|\\\\d*)"
+                "(\\d+\\.?)*",
+                "((\\d+\\.)*|\\d*)"
         ),
         HTML_COMMENT_MATCHING(
                 "<!--([^-]+|[-][^-]+)*-->",

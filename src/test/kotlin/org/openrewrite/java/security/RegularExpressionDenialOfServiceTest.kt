@@ -14,13 +14,17 @@ class RegularExpressionDenialOfServiceTest: RewriteTest {
     fun `fix ReDOS for simple string`() = rewriteRun(
         java(
             """
+            import java.util.regex.Pattern;
+
             class Test {
-                private static final String testRe = "(.|\\s)*";
+                private static final Pattern testRe = Pattern.compile("(.|\\s)*");
             }
             """,
             """
+            import java.util.regex.Pattern;
+
             class Test {
-                private static final String testRe = "(.|\n|\r)*";
+                private static final Pattern testRe = Pattern.compile("(.|\\n|\\r)*");
             }
             """
         )
