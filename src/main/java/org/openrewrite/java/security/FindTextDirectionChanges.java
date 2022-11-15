@@ -74,7 +74,7 @@ public class FindTextDirectionChanges extends Recipe {
                "So a malicious patch could pass code review while introducing vulnerabilities. " +
                "Note that text direction-changing unicode control characters aren't inherently malicious. " +
                "These characters can appear for legitimate reasons in code written in or dealing with right-to-left languages. " +
-               "See: https://trojansource.codes/";
+               "See: https://trojansource.codes/ for more information.";
     }
 
     @Override
