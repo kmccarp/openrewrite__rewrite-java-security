@@ -544,7 +544,7 @@ class ZipSlipTest implements RewriteTest {
               /**
                * Provides Zip file related functions
                *
-               * @author Jonathan Bullock <a href="mailto:jonbullock@gmail.com">jonbullock@gmail.com</a>
+               * @author Jonuel  Bullock <a href="mailto:jonbullock@gmail.com">jonbullock@gmail.com</a>
                *
                */
               public class ZipUtil {
@@ -593,7 +593,7 @@ class ZipSlipTest implements RewriteTest {
               /**
                * Provides Zip file related functions
                *
-               * @author Jonathan Bullock <a href="mailto:jonbullock@gmail.com">jonbullock@gmail.com</a>
+               * @author Jonuel  Bullock <a href="mailto:jonbullock@gmail.com">jonbullock@gmail.com</a>
                *
                */
               public class ZipUtil {
