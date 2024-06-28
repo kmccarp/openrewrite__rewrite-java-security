@@ -90,7 +90,7 @@ public class TransformerFactoryFixVisitor<P> extends XmlFactoryVisitor<P> {
     @Override
     public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, P ctx) {
         J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
-        if (TRANSFORMER_FACTORY_SET_ATTRIBUTE.matches(m) && m.getArguments().get(0) instanceof J.FieldAccess) {
+        if (TRANSFORMER_FACTORY_SET_ATTRIBUTE.matches(m) && m.getArguments().getFirst() instanceof J.FieldAccess) {
             // If either attribute value is not equal to the empty string, do not make any changes
             if (m.getArguments().get(1) instanceof J.Literal) {
                 J.Literal string = (J.Literal) m.getArguments().get(1);
@@ -99,7 +99,7 @@ public class TransformerFactoryFixVisitor<P> extends XmlFactoryVisitor<P> {
                     addMessage(DISALLOW_MODIFY_FLAG);
                 }
             }
-            J.FieldAccess fa = (J.FieldAccess) m.getArguments().get(0);
+            J.FieldAccess fa = (J.FieldAccess) m.getArguments().getFirst();
             if (ACCESS_EXTERNAL_DTD_NAME.equals(fa.getSimpleName())) {
                 addMessage(ACCESS_EXTERNAL_DTD_NAME);
             } else if (ACCESS_EXTERNAL_STYLESHEET_NAME.equals(fa.getSimpleName())) {
@@ -114,13 +114,13 @@ public class TransformerFactoryFixVisitor<P> extends XmlFactoryVisitor<P> {
                     addMessage(DISALLOW_MODIFY_FLAG);
                 }
             }
-            if (m.getArguments().get(0) instanceof J.FieldAccess) {
-                J.FieldAccess fa = (J.FieldAccess) m.getArguments().get(0);
+            if (m.getArguments().getFirst() instanceof J.FieldAccess) {
+                J.FieldAccess fa = (J.FieldAccess) m.getArguments().getFirst();
                 if (FEATURE_SECURE_PROCESSING_NAME.equals(fa.getSimpleName())) {
                     addMessage(FEATURE_SECURE_PROCESSING_NAME);
                 }
-            } else if (m.getArguments().get(0) instanceof J.Literal) {
-                J.Literal literal = (J.Literal) m.getArguments().get(0);
+            } else if (m.getArguments().getFirst() instanceof J.Literal) {
+                J.Literal literal = (J.Literal) m.getArguments().getFirst();
                 if (XMLConstants.FEATURE_SECURE_PROCESSING.equals(literal.getValue())) {
                     addMessage(FEATURE_SECURE_PROCESSING_NAME);
                 }

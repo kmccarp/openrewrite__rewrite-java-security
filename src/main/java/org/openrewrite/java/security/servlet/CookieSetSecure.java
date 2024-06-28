@@ -40,8 +40,10 @@ public class CookieSetSecure extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Check for use of insecure cookies. Cookies should be marked as secure. " +
-               "This ensures that the cookie is sent only over HTTPS to prevent cross-site scripting attacks.";
+        return """
+               Check for use of insecure cookies. Cookies should be marked as secure. \
+               This ensures that the cookie is sent only over HTTPS to prevent cross-site scripting attacks.\
+               """;
     }
 
     @Override
@@ -67,7 +69,7 @@ public class CookieSetSecure extends Recipe {
                                 .javaParser(JavaParser.fromJavaVersion().classpathFromResources(ctx, "javaee-api"))
                                 .build()
                                 .apply(getCursor(), insecure.getCoordinates().after(),
-                                        insecure.getVariables().get(0).getName());
+                                        insecure.getVariables().getFirst().getName());
                     } else {
                         return JavaTemplate.builder("true").build()
                                 .apply(getCursor(), setSecureFalse.getCoordinates().replaceArguments());
@@ -94,13 +96,13 @@ public class CookieSetSecure extends Recipe {
                                 @Override
                                 public boolean isSink(DataFlowNode sinkNode) {
                                     Object value = sinkNode.getCursor().getParentTreeCursor().getValue();
-                                    return value instanceof J.MethodInvocation &&
-                                           setSecure.matches((J.MethodInvocation) value);
+                                    return value instanceof J.MethodInvocation mi &&
+                                           setSecure.matches(mi);
                                 }
                             }).bind(sinkFlow -> {
                                 for (Cursor sink : sinkFlow.getSinkCursors()) {
                                     J.MethodInvocation setSecure = sink.getParentTreeCursor().getValue();
-                                    Expression arg = setSecure.getArguments().get(0);
+                                    Expression arg = setSecure.getArguments().getFirst();
                                     if (!(arg instanceof J.Literal) || Boolean.TRUE.equals(((J.Literal) arg).getValue())) {
                                         // explicitly setSecure(true)
                                         return Option.some(sinkFlow);

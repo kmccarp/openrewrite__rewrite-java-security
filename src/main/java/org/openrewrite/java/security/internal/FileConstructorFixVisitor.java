@@ -65,9 +65,8 @@ public class FileConstructorFixVisitor<P> extends JavaIsoVisitor<P> {
         J.NewClass n = super.visitNewClass(newClass, p);
         Cursor cursor = new Cursor(getCursor().getParent(), n);
         if (FILE_CONSTRUCTOR.matches(n)) {
-            Expression argument = n.getArguments().get(0);
-            if (argument instanceof J.Binary) {
-                J.Binary binary = (J.Binary) argument;
+            Expression argument = n.getArguments().getFirst();
+            if (argument instanceof J.Binary binary) {
                 return (J.NewClass) computeNewArguments(new Cursor(cursor, binary))
                         .map(newArguments -> fileConstructorTemplate
                                 .apply(cursor,

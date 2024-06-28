@@ -52,7 +52,7 @@ public final class ExternalDTDAccumulator {
                             if ("PUBLIC".equals(docTypeDecl.getExternalId().getName()) && docTypeDecl.getInternalSubset().size() > 1) {
                                 externalDTDs.add(docTypeDecl.getInternalSubset().get(1).getName().replace("\"", ""));
                             } else if ("SYSTEM".equals(docTypeDecl.getExternalId().getName())) {
-                                externalDTDs.add(docTypeDecl.getInternalSubset().get(0).getName().replace("\"", ""));
+                                externalDTDs.add(docTypeDecl.getInternalSubset().getFirst().getName().replace("\"", ""));
                             }
                         }
                     }

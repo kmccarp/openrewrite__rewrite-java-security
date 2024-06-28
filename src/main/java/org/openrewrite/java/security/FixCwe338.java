@@ -54,17 +54,21 @@ public class FixCwe338 extends Recipe {
         return JavaParser.fromJavaVersion()
                 .dependsOn(Arrays.asList(
                         Parser.Input.fromString(
-                                "package org.apache.commons.lang;\n" +
-                                "import java.util.Random;\n" +
-                                "public class RandomStringUtils {\n" +
-                                "  public static String random(int count, int start, int end, boolean letters, boolean numbers, char[] chars, Random random) {}\n" +
-                                "}\n"),
+                                """
+                                package org.apache.commons.lang;
+                                import java.util.Random;
+                                public class RandomStringUtils {
+                                  public static String random(int count, int start, int end, boolean letters, boolean numbers, char[] chars, Random random) {}
+                                }
+                                """),
                         Parser.Input.fromString(
-                                "package org.apache.commons.lang3;\n" +
-                                "import java.util.Random;\n" +
-                                "public class RandomStringUtils {\n" +
-                                "  public static String random(int count, int start, int end, boolean letters, boolean numbers, char[] chars, Random random) {}\n" +
-                                "}\n"
+                                """
+                                package org.apache.commons.lang3;
+                                import java.util.Random;
+                                public class RandomStringUtils {
+                                  public static String random(int count, int start, int end, boolean letters, boolean numbers, char[] chars, Random random) {}
+                                }
+                                """
                         )));
     }
 
@@ -78,7 +82,7 @@ public class FixCwe338 extends Recipe {
                         .filter(J.VariableDeclarations.class::isInstance)
                         .map(J.VariableDeclarations.class::cast)
                         .filter(it -> it.getVariables().size() == 1)
-                        .map(it -> it.getVariables().get(0))
+                        .map(it -> it.getVariables().getFirst())
                         .anyMatch(it -> "SECURE_RANDOM".equals(it.getSimpleName()));
                 if (fieldExists) {
                     return classDecl;
@@ -93,14 +97,17 @@ public class FixCwe338 extends Recipe {
 
                 // Add method, fields, static initializer
                 // Putting the method first because we're going to move the fields & initializer to the start of the class in the next step
-                cd = cd.withBody(JavaTemplate.builder("private static String generateRandomAlphanumericString() {\n" +
-                                                      "    return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, SECURE_RANDOM);\n" +
-                                                      "}\n" +
-                                                      "private static final SecureRandom SECURE_RANDOM = new SecureRandom();\n" +
-                                                      "private static final int DEF_COUNT = 20;\n\n" +
-                                                      "static {\n" +
-                                                      "    SECURE_RANDOM.nextBytes(new byte[64]);\n" +
-                                                      "}\n"
+                cd = cd.withBody(JavaTemplate.builder("""
+                                                      private static String generateRandomAlphanumericString() {
+                                                          return RandomStringUtils.random(DEF_COUNT, 0, 0, true, true, null, SECURE_RANDOM);
+                                                      }
+                                                      private static final SecureRandom SECURE_RANDOM = new SecureRandom();
+                                                      private static final int DEF_COUNT = 20;
+                                                      
+                                                      static {
+                                                          SECURE_RANDOM.nextBytes(new byte[64]);
+                                                      }
+                                                      """
                         )
                         .contextSensitive()
                         .javaParser(javaParser())

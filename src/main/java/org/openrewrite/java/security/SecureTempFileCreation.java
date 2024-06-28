@@ -104,7 +104,7 @@ public class SecureTempFileCreation extends Recipe {
                     m = twoArg.apply(
                             getCursor(),
                             m.getCoordinates().replace(),
-                            m.getArguments().get(0),
+                            m.getArguments().getFirst(),
                             m.getArguments().get(1)
                     );
                 } else if (m.getArguments().size() == 3) {
@@ -113,7 +113,7 @@ public class SecureTempFileCreation extends Recipe {
                             getCursor(),
                             m.getCoordinates().replace(),
                             m.getArguments().get(2),
-                            m.getArguments().get(0),
+                            m.getArguments().getFirst(),
                             m.getArguments().get(1)
                     );
                 }

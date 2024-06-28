@@ -55,7 +55,7 @@ public class StringToFileConstructorVisitor<P> extends JavaVisitor<P> {
                 .bind(__ -> {
                     J.NewClass parentConstructor = getCursor().firstEnclosing(J.NewClass.class);
                     if (parentConstructor != null &&
-                        parentConstructor.getArguments().get(0) == expression &&
+                        parentConstructor.getArguments().getFirst() == expression &&
                         TypeUtils.isString(expression.getType())
                     ) {
                         Expression replacementConstructor =

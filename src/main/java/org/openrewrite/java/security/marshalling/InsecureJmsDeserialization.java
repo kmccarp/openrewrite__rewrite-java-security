@@ -38,9 +38,11 @@ public class InsecureJmsDeserialization extends Recipe {
 
     @Override
     public String getDescription() {
-        return "JMS `Object` messages depend on Java Serialization for marshalling/unmarshalling of the " +
-               "message payload when `ObjectMessage#getObject` is called. Deserialization of untrusted " +
-               "data can lead to security flaws.";
+        return """
+               JMS `Object` messages depend on Java Serialization for marshalling/unmarshalling of the \
+               message payload when `ObjectMessage#getObject` is called. Deserialization of untrusted \
+               data can lead to security flaws.\
+               """;
     }
 
     @Override

@@ -35,8 +35,10 @@ public class SecureRandom extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Use cryptographically secure Pseudo Random Number Generation in the \"main\" source set. " +
-                "Replaces instantiation of `java.util.Random` with `java.security.SecureRandom`.";
+        return """
+                Use cryptographically secure Pseudo Random Number Generation in the "main" source set. \
+                Replaces instantiation of `java.util.Random` with `java.security.SecureRandom`.\
+                """;
     }
 
     @Override

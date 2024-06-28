@@ -67,9 +67,11 @@ public class CsrfProtection extends ScanningRecipe<GenerateWebSecurityConfigurer
                 }
 
                 return JavaTemplate
-                        .builder("http" +
-                                 ".csrf()" +
-                                 ".csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());")
+                        .builder("""
+                                 http\
+                                 .csrf()\
+                                 .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());\
+                                 """)
                         .contextSensitive()
                         .imports("org.springframework.security.web.csrf.CookieCsrfTokenRepository")
                         .javaParser(JavaParser.fromJavaVersion()
@@ -90,8 +92,8 @@ public class CsrfProtection extends ScanningRecipe<GenerateWebSecurityConfigurer
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (tree instanceof SourceFile) {
-                    acc.scan((SourceFile) tree, ctx);
+                if (tree instanceof SourceFile file) {
+                    acc.scan(file, ctx);
                 }
                 return tree;
             }
@@ -109,9 +111,9 @@ public class CsrfProtection extends ScanningRecipe<GenerateWebSecurityConfigurer
             @Override
             public J preVisit(J tree, ExecutionContext ctx) {
                 stopAfterPreVisit();
-                if (tree instanceof JavaSourceFile) {
+                if (tree instanceof JavaSourceFile file) {
                     maybeAddImport("org.springframework.security.web.csrf.CookieCsrfTokenRepository");
-                    return acc.modify((JavaSourceFile) tree, ctx);
+                    return acc.modify(file, ctx);
                 }
                 return tree;
             }

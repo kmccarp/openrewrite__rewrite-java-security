@@ -73,8 +73,7 @@ public class SecureRandomPrefersDefaultSeed extends Recipe {
                 for (Expression arg : mi.getArguments()) {
                     if (arg instanceof J.Literal) {
                         isWeakSeed = true;
-                    } else if (arg instanceof J.MethodInvocation) {
-                        J.MethodInvocation argMi = (J.MethodInvocation) arg;
+                    } else if (arg instanceof J.MethodInvocation argMi) {
                         if (SYSTEM_TIME_MATCHER.matches(arg) || SYSTEM_NANO_TIME_MATCHER.matches(argMi)
                                 || (STRING_BYTES_MATCHER.matches(argMi) && argMi.getSelect() instanceof J.Literal)) {
                             isWeakSeed = true;

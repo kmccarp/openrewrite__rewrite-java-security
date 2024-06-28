@@ -32,13 +32,17 @@ class ExternalDTDAccumulatorTest {
 
     private static Stream<Arguments> provideEntitySplitTestArguments() {
         return Stream.of(
-          Arguments.of("<!ENTITY open-hatch-public\n" +
-              "      PUBLIC \"-//Textuality//TEXT Standard open-hatch boilerplate//EN\"\n" +
-              "      \"http://www.texty.com/boilerplate/OpenHatch.xml\">",
+          Arguments.of("""
+              <!ENTITY open-hatch-public
+                    PUBLIC "-//Textuality//TEXT Standard open-hatch boilerplate//EN"
+                    "http://www.texty.com/boilerplate/OpenHatch.xml">\
+              """,
             "http://www.texty.com/boilerplate/OpenHatch.xml"),
-          Arguments.of("<!ENTITY hatch-pic\n" +
-              "      SYSTEM \"../grafix/OpenHatch.gif\"\n" +
-              "      NDATA gif>",
+          Arguments.of("""
+              <!ENTITY hatch-pic
+                    SYSTEM "../grafix/OpenHatch.gif"
+                    NDATA gif>\
+              """,
             "../grafix/OpenHatch.gif")
         );
     }

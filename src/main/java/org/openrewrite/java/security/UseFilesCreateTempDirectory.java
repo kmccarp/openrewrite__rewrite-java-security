@@ -84,7 +84,7 @@ public class UseFilesCreateTempDirectory extends Recipe {
                 if (block != null) {
                     J createFileStatement = null;
                     J firstParent = getCursor().dropParentUntil(J.class::isInstance).getValue();
-                    if (firstParent instanceof J.Assignment && ((J.Assignment) firstParent).getVariable() instanceof J.Identifier) {
+                    if (firstParent instanceof J.Assignment assignment && assignment.getVariable() instanceof J.Identifier) {
                         createFileStatement = firstParent;
                     }
                     if (createFileStatement == null && firstParent instanceof J.VariableDeclarations.NamedVariable) {
@@ -303,19 +303,16 @@ public class UseFilesCreateTempDirectory extends Recipe {
         private static boolean isMatchingCreateFileStatement(J createFileStatement, Statement statement) {
             if (createFileStatement.equals(statement)) {
                 return true;
-            } else if (createFileStatement instanceof J.VariableDeclarations.NamedVariable && statement instanceof J.VariableDeclarations) {
-                J.VariableDeclarations varDecls = (J.VariableDeclarations) statement;
-                return varDecls.getVariables().size() == 1 && varDecls.getVariables().get(0).equals(createFileStatement);
+            } else if (createFileStatement instanceof J.VariableDeclarations.NamedVariable && statement instanceof J.VariableDeclarations varDecls) {
+                return varDecls.getVariables().size() == 1 && varDecls.getVariables().getFirst().equals(createFileStatement);
             }
             return false;
         }
 
         private static boolean isAssignmentForIdent(J.Identifier ident, Statement statement) {
-            if (statement instanceof J.Assignment) {
-                J.Assignment assignment = (J.Assignment) statement;
+            if (statement instanceof J.Assignment assignment) {
                 Expression variable = assignment.getVariable();
-                if (variable instanceof J.Identifier) {
-                    J.Identifier variableIdent = (J.Identifier) variable;
+                if (variable instanceof J.Identifier variableIdent) {
                     return ident.getSimpleName().equals(variableIdent.getSimpleName()) &&
                            TypeUtils.isOfClassType(variableIdent.getType(), "java.io.File");
                 }
@@ -327,16 +324,15 @@ public class UseFilesCreateTempDirectory extends Recipe {
             if (!TypeUtils.isOfClassType(ident.getType(), "java.io.File")) {
                 return false;
             }
-            if (statement instanceof J.MethodInvocation) {
-                J.MethodInvocation mi = (J.MethodInvocation) statement;
+            if (statement instanceof J.MethodInvocation mi) {
                 if (!invocationMatcher.matches(mi)) {
                     return false;
                 }
                 J.Identifier sel;
                 if (mi.getSelect() != null && mi.getSelect().unwrap() instanceof J.Identifier) {
                     sel = (J.Identifier) mi.getSelect().unwrap();
-                } else if (!mi.getArguments().isEmpty() && mi.getArguments().get(0).unwrap() instanceof J.Identifier) {
-                    sel = (J.Identifier) mi.getArguments().get(0).unwrap();
+                } else if (!mi.getArguments().isEmpty() && mi.getArguments().getFirst().unwrap() instanceof J.Identifier) {
+                    sel = (J.Identifier) mi.getArguments().getFirst().unwrap();
                 } else {
                     return false;
                 }
@@ -347,11 +343,9 @@ public class UseFilesCreateTempDirectory extends Recipe {
 
         @Nullable
         private static J.Identifier getIdent(J createFileStatement) {
-            if (createFileStatement instanceof J.Assignment) {
-                J.Assignment assignment = (J.Assignment) createFileStatement;
+            if (createFileStatement instanceof J.Assignment assignment) {
                 return (J.Identifier) assignment.getVariable();
-            } else if (createFileStatement instanceof J.VariableDeclarations.NamedVariable) {
-                J.VariableDeclarations.NamedVariable var = (J.VariableDeclarations.NamedVariable) createFileStatement;
+            } else if (createFileStatement instanceof J.VariableDeclarations.NamedVariable var) {
                 return var.getName();
             }
             return null;
@@ -377,7 +371,7 @@ public class UseFilesCreateTempDirectory extends Recipe {
                     m = maybeAutoFormat(m, twoArg.apply(
                                     getCursor(),
                                     m.getCoordinates().replace(),
-                                    m.getArguments().get(0),
+                                    m.getArguments().getFirst(),
                                     m.getArguments().get(1)),
                             p
                     );
@@ -387,7 +381,7 @@ public class UseFilesCreateTempDirectory extends Recipe {
                                     getCursor(),
                                     m.getCoordinates().replace(),
                                     m.getArguments().get(2),
-                                    m.getArguments().get(0),
+                                    m.getArguments().getFirst(),
                                     m.getArguments().get(1)),
                             p
                     );
@@ -395,14 +389,12 @@ public class UseFilesCreateTempDirectory extends Recipe {
                 J.MethodInvocation select = (J.MethodInvocation) m.getSelect();
                 //noinspection ConstantConditions
                 select = select.withArguments(ListUtils.map(select.getArguments(), arg -> {
-                    if (arg instanceof J.Binary) {
-                        J.Binary binaryArg = (J.Binary) arg;
+                    if (arg instanceof J.Binary binaryArg) {
                         Expression rightArg = binaryArg.getRight();
                         if (rightArg.getType() == JavaType.Primitive.Null) {
                             return binaryArg.getLeft();
-                        } else if (rightArg instanceof J.Literal) {
-                            J.Literal literalRight = (J.Literal) rightArg;
-                            if (literalRight.getValueSource() != null && "\"\"".equals(((J.Literal) rightArg).getValueSource())) {
+                        } else if (rightArg instanceof J.Literal literalRight) {
+                            if (literalRight.getValueSource() != null && "\"\"".equals(literalRight.getValueSource())) {
                                 return binaryArg.getLeft();
                             }
                         }

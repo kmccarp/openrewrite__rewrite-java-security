@@ -47,8 +47,10 @@ public class FindSensitiveApiEndpoints extends Recipe {
     List<String> fieldNames;
 
     @Option(displayName = "Transitive",
-            description = "Find model objects that contain other model " +
-                          "objects that contain sensitive data.",
+            description = """
+                          Find model objects that contain other model \
+                          objects that contain sensitive data.\
+                          """,
             required = false)
     @Nullable
     Boolean transitive;
@@ -62,8 +64,10 @@ public class FindSensitiveApiEndpoints extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Find data models exposed by REST APIs that contain " +
-               "sensitive information like PII and secrets.";
+        return """
+               Find data models exposed by REST APIs that contain \
+               sensitive information like PII and secrets.\
+               """;
     }
 
     @Override
@@ -90,7 +94,7 @@ public class FindSensitiveApiEndpoints extends Recipe {
                         .collect(toList());
 
                 for (String sensitivePath : sensitivePaths) {
-                    String fieldName = sensitivePaths.get(sensitivePaths.size() - 1);
+                    String fieldName = sensitivePaths.getLast();
                     endpoints.insertRow(ctx, new SensitiveApiEndpoints.Row(
                             getCursor().firstEnclosingOrThrow(J.CompilationUnit.class).getSourcePath().toString(),
                             method.getSimpleName(),
@@ -117,8 +121,7 @@ public class FindSensitiveApiEndpoints extends Recipe {
     private void sensitiveFieldPathsRecursive(@Nullable JavaType type, List<JavaType.Method> path,
                                               List<List<JavaType.Method>> sensitive, Set<String> seen) {
         JavaType.FullyQualified fq = TypeUtils.asFullyQualified(type);
-        if (type instanceof JavaType.Parameterized) {
-            JavaType.Parameterized parameterized = (JavaType.Parameterized) type;
+        if (type instanceof JavaType.Parameterized parameterized) {
             for (JavaType typeParameter : parameterized.getTypeParameters()) {
                 sensitiveFieldPathsRecursive(typeParameter, path, sensitive, seen);
             }
@@ -252,11 +255,10 @@ public class FindSensitiveApiEndpoints extends Recipe {
         private static String getArg(J.Annotation annotation, String key, String defaultValue) {
             if (annotation.getArguments() != null) {
                 for (Expression argument : annotation.getArguments()) {
-                    if (argument instanceof J.Literal) {
+                    if (argument instanceof J.Literal literal) {
                         //noinspection ConstantConditions
-                        return (String) ((J.Literal) argument).getValue();
-                    } else if (argument instanceof J.Assignment) {
-                        J.Assignment arg = (J.Assignment) argument;
+                        return (String) literal.getValue();
+                    } else if (argument instanceof J.Assignment arg) {
                         if (((J.Identifier) arg.getVariable()).getSimpleName().equals(key)) {
                             if (arg.getAssignment() instanceof J.FieldAccess) {
                                 return ((J.FieldAccess) arg.getAssignment()).getSimpleName();

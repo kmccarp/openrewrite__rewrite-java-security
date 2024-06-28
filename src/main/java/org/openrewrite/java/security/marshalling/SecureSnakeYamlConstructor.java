@@ -106,7 +106,7 @@ public class SecureSnakeYamlConstructor extends Recipe {
                             .javaParser(JavaParser.fromJavaVersion()
                                     .classpathFromResources(ctx, "snakeyaml-1.33"))
                             .build()
-                            .apply(getCursor(), newClass.getCoordinates().replace(), newClass.getArguments().get(0));
+                            .apply(getCursor(), newClass.getCoordinates().replace(), newClass.getArguments().getFirst());
                 } else if (snakeYamlDumperArgumentConstructor.matches(newClass)) {
                     JavaType.Method ctorType = newClass.getConstructorType();
                     assert ctorType != null;
@@ -124,7 +124,7 @@ public class SecureSnakeYamlConstructor extends Recipe {
                             .javaParser(JavaParser.fromJavaVersion()
                                     .classpathFromResources(ctx, "snakeyaml-1.33"))
                             .build()
-                            .apply(getCursor(), newClass.getCoordinates().replace(), newClass.getArguments().get(0));
+                            .apply(getCursor(), newClass.getCoordinates().replace(), newClass.getArguments().getFirst());
                 }
 
                 return super.visitNewClass(newClass, ctx);

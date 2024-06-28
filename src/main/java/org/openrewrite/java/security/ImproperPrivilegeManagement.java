@@ -39,9 +39,11 @@ public class ImproperPrivilegeManagement extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Marking code as privileged enables a piece of trusted code to temporarily " +
-               "enable access to more resources than are available directly to the code " +
-               "that called it.";
+        return """
+               Marking code as privileged enables a piece of trusted code to temporarily \
+               enable access to more resources than are available directly to the code \
+               that called it.\
+               """;
     }
 
     @Override

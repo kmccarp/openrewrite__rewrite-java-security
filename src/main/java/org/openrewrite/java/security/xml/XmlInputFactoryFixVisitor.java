@@ -89,15 +89,15 @@ public class XmlInputFactoryFixVisitor<P> extends XmlFactoryVisitor<P> {
     @Override
     public J.MethodInvocation visitMethodInvocation(J.MethodInvocation method, P ctx) {
         J.MethodInvocation m = super.visitMethodInvocation(method, ctx);
-        if (XML_PARSER_FACTORY_SET_PROPERTY.matches(m) && m.getArguments().get(0) instanceof J.FieldAccess) {
-            J.FieldAccess fa = (J.FieldAccess) m.getArguments().get(0);
+        if (XML_PARSER_FACTORY_SET_PROPERTY.matches(m) && m.getArguments().getFirst() instanceof J.FieldAccess) {
+            J.FieldAccess fa = (J.FieldAccess) m.getArguments().getFirst();
             if (SUPPORTING_EXTERNAL_ENTITIES_PROPERTY_NAME.equals(fa.getSimpleName())) {
                 addMessage(SUPPORTING_EXTERNAL_ENTITIES_PROPERTY_NAME);
             } else if (SUPPORT_DTD_FALSE_PROPERTY_NAME.equals(fa.getSimpleName())) {
                 checkDTDSupport(m);
             }
-        } else if (XML_PARSER_FACTORY_SET_PROPERTY.matches(m) && m.getArguments().get(0) instanceof J.Literal) {
-            J.Literal literal = (J.Literal) m.getArguments().get(0);
+        } else if (XML_PARSER_FACTORY_SET_PROPERTY.matches(m) && m.getArguments().getFirst() instanceof J.Literal) {
+            J.Literal literal = (J.Literal) m.getArguments().getFirst();
             if (TypeUtils.isString(literal.getType())) {
                 if (XMLInputFactory.IS_SUPPORTING_EXTERNAL_ENTITIES.equals(literal.getValue())) {
                     addMessage(SUPPORTING_EXTERNAL_ENTITIES_PROPERTY_NAME);

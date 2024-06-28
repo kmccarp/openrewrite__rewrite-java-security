@@ -208,11 +208,11 @@ public class PathTraversalGuardInsertionVisitor<P> extends JavaIsoVisitor<P> {
         }
 
         private String runtimeExceptionThrowLine() {
-            return String.format("    throw new RuntimeException(\"%s\");%n", exceptionMessage);
+            return "    throw new RuntimeException(\"%s\");%n".formatted(exceptionMessage);
         }
 
         private String ioExceptionThrowLine() {
-            return String.format("    throw new IOException(\"%s\");%n", exceptionMessage);
+            return "    throw new IOException(\"%s\");%n".formatted(exceptionMessage);
         }
 
         private JavaTemplate noPathTraversalFileTemplate() {
@@ -312,7 +312,7 @@ public class PathTraversalGuardInsertionVisitor<P> extends JavaIsoVisitor<P> {
 
         @Override
         public J visitNewClass(J.NewClass newClass, P p) {
-            return visitMethodCall(newClass, n -> n.getArguments().get(0))
+            return visitMethodCall(newClass, n -> n.getArguments().getFirst())
                     .<J>map(Function.identity())
                     .orElseGet(() -> super.visitNewClass(newClass, p));
         }
@@ -460,7 +460,7 @@ public class PathTraversalGuardInsertionVisitor<P> extends JavaIsoVisitor<P> {
             if (branch) {
                 return PATH_STARTS_WITH_MATCHER.matches(guard.getExpression()) ||
                        (STRING_STARTS_WITH_MATCHER.matches(guard.getExpression()) &&
-                        PartialPathTraversalVulnerability.isSafePartialPathExpression(((J.MethodInvocation) guard.getExpression()).getArguments().get(0)));
+                        PartialPathTraversalVulnerability.isSafePartialPathExpression(((J.MethodInvocation) guard.getExpression()).getArguments().getFirst()));
             } else {
                 return false;
             }

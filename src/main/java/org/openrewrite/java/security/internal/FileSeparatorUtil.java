@@ -36,12 +36,12 @@ public final class FileSeparatorUtil {
             // - separatorChar
             J.Identifier nameIdentifier;
             JavaType type;
-            if (expression instanceof J.FieldAccess) {
+            if (expression instanceof J.FieldAccess access) {
                 // CASE:
                 // - File.separator
                 // - File.separatorChar
-                nameIdentifier = ((J.FieldAccess) expression).getName();
-                type = ((J.FieldAccess) expression).getTarget().getType();
+                nameIdentifier = access.getName();
+                type = access.getTarget().getType();
             } else {
                 // CASE:
                 // - separator statically imported from java.io.File
@@ -55,11 +55,7 @@ public final class FileSeparatorUtil {
             String name = nameIdentifier.getSimpleName();
             return ("separator".equals(name) || "separatorChar".equals(name)) &&
                     TypeUtils.isOfClassType(type, "java.io.File");
-        } else if (expression instanceof J.Literal) {
-            // CASE:
-            // - "/";
-            // - '/'
-            J.Literal literal = (J.Literal) expression;
+        } else if (expression instanceof J.Literal literal) {
             if (literal.getValue() instanceof String) {
                 String value = (String) literal.getValue();
                 // CASE:

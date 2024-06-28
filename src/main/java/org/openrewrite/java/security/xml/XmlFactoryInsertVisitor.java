@@ -50,8 +50,7 @@ public abstract class XmlFactoryInsertVisitor<P> extends JavaIsoVisitor<P> {
             for (int i = b.getStatements().size() - 2; i > -1; i--) {
                 Statement st = b.getStatements().get(i);
                 Statement stBefore = b.getStatements().get(i + 1);
-                if (st instanceof J.MethodInvocation) {
-                    J.MethodInvocation m = (J.MethodInvocation) st;
+                if (st instanceof J.MethodInvocation m) {
                     if (Expression.unwrap(m.getSelect()) instanceof J.Identifier &&
                         (factoryInstanceMatcher.matches(m) || factoryMethodCallMatcher.matches(m))
                     ) {
@@ -60,11 +59,10 @@ public abstract class XmlFactoryInsertVisitor<P> extends JavaIsoVisitor<P> {
                             beforeStatement = stBefore;
                         }
                     }
-                } else if (st instanceof J.VariableDeclarations) {
-                    J.VariableDeclarations vd = (J.VariableDeclarations) st;
-                    if (vd.getVariables().get(0).getInitializer() instanceof J.MethodInvocation) {
-                        String varName = vd.getVariables().get(0).getSimpleName();
-                        J.MethodInvocation m = (J.MethodInvocation) vd.getVariables().get(0).getInitializer();
+                } else if (st instanceof J.VariableDeclarations vd) {
+                    if (vd.getVariables().getFirst().getInitializer() instanceof J.MethodInvocation) {
+                        String varName = vd.getVariables().getFirst().getSimpleName();
+                        J.MethodInvocation m = (J.MethodInvocation) vd.getVariables().getFirst().getInitializer();
                         if (m != null && varName.equals(getFactoryVariableName()) && factoryInstanceMatcher.matches(m)) {
                             beforeStatement = stBefore;
                         }

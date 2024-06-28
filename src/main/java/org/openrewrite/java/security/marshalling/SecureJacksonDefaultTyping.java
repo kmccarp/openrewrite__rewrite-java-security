@@ -88,7 +88,7 @@ public class SecureJacksonDefaultTyping extends Recipe {
                                 .build()
                                 .apply(getCursor(),
                                         method.getCoordinates().replace(),
-                                        ListUtils.concat(method.getSelect(), method.getArguments().get(0) instanceof J.Empty ? emptyList() : method.getArguments()).toArray());
+                                        ListUtils.concat(method.getSelect(), method.getArguments().getFirst() instanceof J.Empty ? emptyList() : method.getArguments()).toArray());
                     }
                 }
 

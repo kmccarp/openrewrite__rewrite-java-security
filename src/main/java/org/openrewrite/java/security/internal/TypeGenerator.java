@@ -37,7 +37,7 @@ public final class TypeGenerator {
         if (compilationUnits.size() != 1) {
             throw new IllegalArgumentException("Could not parse type: " + fqn);
         }
-        J.CompilationUnit compilationUnit = compilationUnits.get(0);
+        J.CompilationUnit compilationUnit = compilationUnits.getFirst();
         AtomicReference<JavaType> type = new AtomicReference<>();
         new JavaIsoVisitor<AtomicReference<JavaType>>() {
             @Override

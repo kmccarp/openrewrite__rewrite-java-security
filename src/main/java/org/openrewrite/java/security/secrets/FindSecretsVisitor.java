@@ -47,8 +47,8 @@ public abstract class FindSecretsVisitor extends TreeVisitor<Tree, ExecutionCont
                 @Override
                 public Space visitSpace(Space space, Space.Location loc, ExecutionContext ctx) {
                     return space.withComments(ListUtils.map(space.getComments(), comment -> {
-                        if (comment instanceof TextComment) {
-                            if (isSecret(null, ((TextComment) comment).getText(), ctx)) {
+                        if (comment instanceof TextComment textComment) {
+                            if (isSecret(null, textComment.getText(), ctx)) {
                                 return comment.withMarkers(comment.getMarkers()
                                         .compute(new SearchResult(randomId(), name), (s1, s2) -> s1 == null ? s2 : s1));
                             }

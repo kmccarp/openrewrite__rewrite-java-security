@@ -64,12 +64,14 @@ public class FindTextDirectionChanges extends Recipe {
 
     @Override
     public String getDescription() {
-        return "Finds unicode control characters which can change the direction text is displayed in. " +
-               "These control characters can alter how source code is presented to a human reader without affecting its interpretation by tools like compilers. " +
-               "So a malicious patch could pass code review while introducing vulnerabilities. " +
-               "Note that text direction-changing unicode control characters aren't inherently malicious. " +
-               "These characters can appear for legitimate reasons in code written in or dealing with right-to-left languages. " +
-               "See: https://trojansource.codes/ for more information.";
+        return """
+               Finds unicode control characters which can change the direction text is displayed in. \
+               These control characters can alter how source code is presented to a human reader without affecting its interpretation by tools like compilers. \
+               So a malicious patch could pass code review while introducing vulnerabilities. \
+               Note that text direction-changing unicode control characters aren't inherently malicious. \
+               These characters can appear for legitimate reasons in code written in or dealing with right-to-left languages. \
+               See: https://trojansource.codes/ for more information.\
+               """;
 
     }
 

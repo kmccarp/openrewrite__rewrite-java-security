@@ -90,8 +90,8 @@ public class PreventClickjacking extends ScanningRecipe<GenerateWebSecurityConfi
         return new TreeVisitor<Tree, ExecutionContext>() {
             @Override
             public @Nullable Tree visit(@Nullable Tree tree, ExecutionContext ctx) {
-                if (tree instanceof SourceFile) {
-                    acc.scan((SourceFile) tree, ctx);
+                if (tree instanceof SourceFile file) {
+                    acc.scan(file, ctx);
                 }
                 return tree;
             }
@@ -109,8 +109,8 @@ public class PreventClickjacking extends ScanningRecipe<GenerateWebSecurityConfi
             @Override
             public Tree preVisit(Tree tree, ExecutionContext ctx) {
                 stopAfterPreVisit();
-                if (tree instanceof JavaSourceFile) {
-                    return acc.modify((JavaSourceFile) tree, ctx);
+                if (tree instanceof JavaSourceFile file) {
+                    return acc.modify(file, ctx);
                 }
                 return tree;
             }

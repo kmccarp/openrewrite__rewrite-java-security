@@ -47,8 +47,7 @@ public class GenerateWebSecurityConfigurerAdapter {
     Path configurationSourcePath;
 
     void scan(SourceFile sourceFile, ExecutionContext ctx) {
-        if (sourceFile instanceof J.CompilationUnit) {
-            J.CompilationUnit cu = (J.CompilationUnit) sourceFile;
+        if (sourceFile instanceof J.CompilationUnit cu) {
             for (JavaType javaType : cu.getTypesInUse().getTypesInUse()) {
                 if (TypeUtils.isOfClassType(javaType, "org.springframework.boot.autoconfigure.SpringBootApplication")) {
                     springBootApplications.add(cu);
@@ -104,8 +103,7 @@ public class GenerateWebSecurityConfigurerAdapter {
     }
 
     JavaSourceFile modify(JavaSourceFile sourceFile, ExecutionContext ctx) {
-        if (sourceFile instanceof J.CompilationUnit && sourceFile.getSourcePath().equals(configurationSourcePath)) {
-            J.CompilationUnit cu = (J.CompilationUnit) sourceFile;
+        if (sourceFile instanceof J.CompilationUnit cu && sourceFile.getSourcePath().equals(configurationSourcePath)) {
             for (JavaType.Method declaredMethod : cu.getTypesInUse().getDeclaredMethods()) {
                 if (CONFIGURE.matches(declaredMethod)) {
                     return visitConfigureMethod(cu, ctx, onConfigureBlock);

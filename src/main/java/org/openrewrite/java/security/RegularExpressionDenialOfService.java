@@ -36,9 +36,11 @@ public class RegularExpressionDenialOfService extends Recipe {
 
     @Override
     public String getDescription() {
-        return "ReDoS is a Denial of Service attack that exploits the fact that most Regular Expression implementations may reach extreme situations that cause them to " +
-                "work very slowly (exponentially related to input size). " +
-                "See the OWASP description of this attack [here](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS) for more details.";
+        return """
+                ReDoS is a Denial of Service attack that exploits the fact that most Regular Expression implementations may reach extreme situations that cause them to \
+                work very slowly (exponentially related to input size). \
+                See the OWASP description of this attack [here](https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS) for more details.\
+                """;
     }
 
     @Override
